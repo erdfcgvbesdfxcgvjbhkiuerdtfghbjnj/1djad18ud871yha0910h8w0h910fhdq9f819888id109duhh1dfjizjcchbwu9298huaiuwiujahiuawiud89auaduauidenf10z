@@ -1,60 +1,161 @@
 <!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>跳转中...</title>
+</head>
+<body>
+    <button onclick="openBlank()" style="display:none; padding:15px; margin:20px auto; font-size:16px; cursor:pointer;">点击进入游戏中心</button>
+
+    <script>
+        // 【核心内嵌网页】：免密码、直接显示 8 款游戏卡片的游戏盒子
+        const mcHTML = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>正在加载游戏中心...</title>
+    <title>Google Classroom</title>
     <style>
-        body { background-color: #0f172a; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .loader { text-align: center; cursor: pointer; padding: 20px; border: 1px solid #334155; border-radius: 12px; background: #1e293b; }
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); padding: 40px 20px; overflow-y: auto; }
+        
+        header { text-align: center; margin-bottom: 45px; }
+        header h1 { font-size: 2.6rem; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .game-card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid #334155; display: flex; flex-direction: column; transition: transform 0.3s, border-color 0.3s; }
+        .game-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        
+        .game-cover { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; background: linear-gradient(135deg, #1e1b4b, #311042); user-select: none; }
+        .game-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .game-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; text-align: center; }
+        
+        .play-btn { background: var(--primary); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; width: 100%; margin-top: auto; transition: background 0.2s; }
+        .play-btn:hover { background: var(--primary-hover); }
+
+        /* 全屏游戏区样式 */
+        .fullscreen-iframe { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 9999; background: black; }
     </style>
 </head>
 <body>
 
-    <div class="loader" onclick="launchBox()">
-        <h2>点击此处进入游戏中心</h2>
-        <p>(若浏览器未自动弹出，请点击上方文字并允许弹出窗口)</p>
+    <header><h1>游戏中心</h1></header>
+    
+    <div class="game-grid">
+        <!-- 游戏 1 -->
+        <div class="game-card">
+            <div class="game-cover">⛏️</div>
+            <div class="game-info">
+                <div class="game-title">new tuff client</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/tuff/')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 2 -->
+        <div class="game-card">
+            <div class="game-cover">⛏️</div>
+            <div class="game-info">
+                <div class="game-title">modern client</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/eaglercraft-3')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 3 -->
+        <div class="game-card">
+            <div class="game-cover">⛏️</div>
+            <div class="game-info">
+                <div class="game-title">tuff client old</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/eaglercraft-1')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 4 -->
+        <div class="game-card">
+            <div class="game-cover">⛏️</div>
+            <div class="game-info">
+                <div class="game-title">Eaglercraft</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/eaglercraft-2')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 5 -->
+        <div class="game-card">
+            <div class="game-cover">🌐</div>
+            <div class="game-info">
+                <div class="game-title">Browser</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/m/')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 6 -->
+        <div class="game-card">
+            <div class="game-cover">🥕</div>
+            <div class="game-info">
+                <div class="game-title">dadish</div>
+                <button class="play-btn" onclick="openGameOutside('https://andy78gg.github.io/dadish/')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 7 -->
+        <div class="game-card">
+            <div class="game-cover">🎮</div>
+            <div class="game-info">
+                <div class="game-title">game</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/game/')">立即开玩</button>
+            </div>
+        </div>
+        <!-- 游戏 8 -->
+        <div class="game-card">
+            <div class="game-cover">⚔️</div>
+            <div class="game-info">
+                <div class="game-title">fight</div>
+                <button class="play-btn" onclick="loadGame('https://andy78gg.github.io/fight/')">立即开玩</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        function launchBox() {
-            // 获取当前网址的根路径，并拼接出真正的游戏盒子文件 box.html
-            const currentUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-            const boxUrl = currentUrl + 'box.html';
+        // 游戏点击事件：在当前 about:blank 内覆盖全屏加载游戏
+        // 支持 3D 视角锁定、全屏、手柄
+        function loadGame(targetUrl) {
+            const iframe = document.createElement('iframe');
+            iframe.src = targetUrl;
+            iframe.className = 'fullscreen-iframe';
+            iframe.setAttribute('allow', 'autoplay; gamepad; fullscreen; pointer-lock');
+            iframe.setAttribute('allowfullscreen', 'true');
+            document.body.appendChild(iframe);
+            document.title = "Google Classroom"; 
+        }
 
-            // 打开一个完全空白的 about:blank 页面
-            const win = window.open('about:blank', '_blank');
-            
-            if (win) {
-                // 瞬间将全屏无边框的 iframe 嵌入 about:blank，加载真正的游戏盒子
-                win.document.write(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>游戏盒子</title>
-                        <link rel="icon" type="image/png" href="https://github.com">
-                        <style>
-                            html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#0f172a; }
-                            iframe { width:100%; height:100%; border:none; display:block; }
-                        </style>
-                    </head>
-                    <body>
-                        <iframe src="${boxUrl}" allow="autoplay; gamepad; fullscreen; pointer-lock" allowfullscreen="true"></iframe>
-                    </body>
-                    </html>
-                `);
-                win.document.close();
+        // 针对部分特殊 H5 游戏（如 dadish），如果遇到嵌套黑屏，可以选用该备用方法
+        function openGameOutside(targetUrl) {
+            loadGame(targetUrl);
+        }
+    <\/script>
+</body>
+</html>`;
+
+        // 核心跳转机制
+        function openBlank() {
+            const blankWin = window.open('about:blank', '_blank');
+            if (blankWin) {
+                blankWin.document.open();
+                blankWin.document.write(mcHTML);
+                blankWin.document.close();
                 
-                // 成功打开后，让原来的 GitHub 页面自动关闭（或跳转到空白）
+                // 将原 GitHub 标签页也强制洗白成 about:blank 隐藏痕迹
                 window.location.replace('about:blank');
+            } else {
+                // 如果被浏览器拦截，显示后备按钮供手动点击
+                document.querySelector('button').style.display = 'block';
+                alert('游戏中心启动失败：请点击屏幕上的按钮，并在浏览器右上角允许弹窗！');
             }
         }
 
-        // 页面一加载就尝试自动执行
-        window.onload = function() {
-            launchBox();
-        };
+        // 页面一加载就执行
+        window.addEventListener('load', function() {
+            setTimeout(openBlank, 100);
+        });
     </script>
 </body>
 </html>
